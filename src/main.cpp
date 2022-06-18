@@ -1,7 +1,9 @@
-int main(int argc, char *argv[]) 
-{
+#include <QApplication>
+#include <QWidget>
 
-
-
-    return 0;
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
+    QWidget window;
+    window.show();
+    return app.exec();
 }

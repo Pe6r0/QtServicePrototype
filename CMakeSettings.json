@@ -7,7 +7,7 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-D CMAKE_PREFIX_PATH=\"C:/Programs/Qt/6.3.0/msvc2019_64/\"",
+      "cmakeCommandArgs": "-D CMAKE_PREFIX_PATH=\"C:/Programs/Qt/6.3.0/msvc2019_64/\" ",
       "buildCommandArgs": "",
       "ctestCommandArgs": ""
     },
@@ -20,14 +20,7 @@
       "cmakeCommandArgs": "-D CMAKE_PREFIX_PATH=\"C:/Programs/Qt/6.3.0/msvc2019_64/\"",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "variables": [
-        {
-          "name": "Qt5_DIR",
-          "value": "C:/Programs/Qt/6.3.0/msvc2019_64/",
-          "type": "PATH"
-        }
-      ]
+      "inheritEnvironments": [ "msvc_x64_x64" ]
     }
   ]
 }

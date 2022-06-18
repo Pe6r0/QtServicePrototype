@@ -37,3 +37,10 @@ PRIVATE
 Qt::Widgets
 Qt::Test
 Qt::Core)
+
+add_custom_command(TARGET TestService POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -E
+        env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}"
+            "$<TARGET_FILE:TestService>"
+    COMMENT "Running windeployqt..."
+)
