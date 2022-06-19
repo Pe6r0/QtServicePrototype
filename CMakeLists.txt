@@ -14,17 +14,18 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Core Test)
 
 enable_testing(true)
 
-set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT CMakeLists)
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Services)
+
+include_directories("include")
 
 set(SOURCES
 	src/main.cpp
-	src/Service.cpp
 	src/ServiceManager.cpp
 	src/EligibilityService.cpp
 	src/RewardsService.cpp)
+
 set(HEADERS
 	include/Service.h
-	include/Service_Test.h
 	include/ServiceManager.h
 	include/ServiceManager_Test.h
 	include/EligibilityService.h
@@ -32,7 +33,6 @@ set(HEADERS
 	include/RewardsService_Test.h)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-add_test(NAME Service_Test COMMAND Service_Test)
 add_test(NAME ServiceManager_Test COMMAND ServiceManager_Test)
 add_test(NAME RewardsService_Test COMMAND RewardsService_Test)
 

@@ -1,35 +1,34 @@
 #pragma once
-#include <QWidget>
 #include <vector>
-//#include <optional>
 
-#include "../include/Service.h"
-#include "../include/EligibilityService.h"
+#include <QWidget>
+#include <QPointer>
+
+#include "Service.h"
+#include "ServiceManager.h"
+#include "EligibilityService.h"
 
 namespace services {
-/*
-using AccountNumber = size_t;
 
-struct Reward
-{
-    std::string test;
-};
+using AccountNumber = size_t;
 
 class RewardsService : public Service {
   Q_OBJECT
 public:
     RewardsService(QObject* parent = nullptr);
 
-    bool setEligibityService(Service &reporter);
+    //bool setEligibityService(Service &reporter);
+    Reward myRewards;
 
 public slots:
-    std::optional<std::vector<Reward>> eligibility(AccountNumber accountNumber); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
+
+    //std::vector<Reward> getRewards(const AccountNumber accountNumber, std::vector<Channel>); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
 
 //public signals:
     //void rewards(std::vector<Reward> results);
 
 private:
-    QPointer<QObject> _eligibilityService;
+    QPointer<EligibilityService> _eligibilityService;
 };
-*/
+
 } // namespace services

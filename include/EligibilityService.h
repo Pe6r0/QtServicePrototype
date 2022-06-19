@@ -4,16 +4,18 @@
 #include <optional>
 #include <set>
 
-#include "../include/Service.h"
-#include "../include/RewardsService.h"
+#include <QPointer>
 
-//TODO: Eligibility Service currently in development
+#include "Service.h"
+#include "RewardsService.h"
 
+//TODO: Eligibility Service currently in development. For Testing purposes it just replied based on account number parity.
 namespace services {
-    /*class EligibilityService : public Service {
+    using AccountNumber = size_t;
+
+    class EligibilityService : public Service {
         Q_OBJECT
     public:
-
         enum class Output
         {
             CUSTOMER_ELIGIBLE,
@@ -21,12 +23,17 @@ namespace services {
             ERROR
         };
 
+        EligibilityService(QObject* parent);
 
-        EligibilityService(QObject* parent) : Service(parent) {}
+        ~EligibilityService();
 
+        void setupRewardsService(QObject &rewardsService);
 
+    signals:
+        void eligibility(Output value);
 
-        void setRewardsService(QObject &rewardsService);
+    public slots:
+        void checkEligibility(const AccountNumber number);
     };
-    */
+    
 } // namespace services

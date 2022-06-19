@@ -1,18 +1,16 @@
 #pragma once
 #include <QObject>
-#include <QPointer>
-
 
 namespace services {
 class Service : public QObject {
-  Q_OBJECT
+    Q_OBJECT
 public:
     Service(QObject* parent = nullptr) : QObject{ parent }
     {
         blockSignals(true);
     }
 
-    ~Service() = 0;
+    virtual ~Service() {};
 
     void start() 
     { 
@@ -29,7 +27,8 @@ public:
     bool isRunning() { return _running; };
 
 private:
-    bool _running{ true };
+    bool _running{ false };
 };
+
 
 } // namespace services

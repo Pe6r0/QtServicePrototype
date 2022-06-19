@@ -3,7 +3,7 @@
 #include <QFile>
 #include <iostream>
 
-#include "../include/ServiceManager.h"
+#include "ServiceManager.h"
 /*
 namespace {
     constexpr const char* cConfigFile = "config.json";
