@@ -1,22 +1,32 @@
 #pragma once
 #include <QWidget>
 #include <vector>
-//#include <optional>
+#include <optional>
+#include <set>
 
 #include "../include/Service.h"
 #include "../include/RewardsService.h"
 
+//TODO: Eligibility Service currently in development
+
 namespace services {
-    class EligibilityService : public Service {
+    /*class EligibilityService : public Service {
         Q_OBJECT
     public:
-        EligibilityService(QObject &rewardsService); // data input, check move etc
+
+        enum class Output
+        {
+            CUSTOMER_ELIGIBLE,
+            CUSTOMER_INELIGIBLE,
+            ERROR
+        };
+
+
+        EligibilityService(QObject* parent) : Service(parent) {}
+
+
 
         void setRewardsService(QObject &rewardsService);
-
-        /*std::optional<*/std::vector<Reward>/*>*/ query(size_t accountNumber, std::vector<Subscriptions> subs); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
-    private:
-        QPointer<QObject> _eligibilityService;
     };
-
+    */
 } // namespace services

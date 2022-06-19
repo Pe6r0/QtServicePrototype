@@ -1,0 +1,24 @@
+{
+  "Channels": [
+    "Sports",
+    "Kids",
+    "Music",
+    "News",
+    "Movies"
+  ],
+
+  "Rewards": [
+    {
+      "Title": "Champions League Final Ticket",
+      "Channel": "Sports"
+    },
+    {
+      "Title": "Karaoke Pro Microphone",
+      "Channel": "Music"
+    },
+    {
+      "Title": "Pirates of the Caribbean Collection",
+      "Channel": "Movies"
+    }
+  ]
+}

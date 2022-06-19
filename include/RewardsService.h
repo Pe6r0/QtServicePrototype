@@ -7,21 +7,29 @@
 #include "../include/EligibilityService.h"
 
 namespace services {
+/*
+using AccountNumber = size_t;
 
-enum class Reward { FIRST, PREMIUM, BASIC };
-
-enum class Subscriptions { TEST, KIDS };
+struct Reward
+{
+    std::string test;
+};
 
 class RewardsService : public Service {
   Q_OBJECT
 public:
-  RewardsService(QObject &reporter); // data input, check move etc
+    RewardsService(QObject* parent = nullptr);
 
-  void setEligibityService(QObject &reporter);
-  
-  /*std::optional<*/std::vector<Reward>/*>*/ query(size_t accountNumber, std::vector<Subscriptions> subs); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
+    bool setEligibityService(Service &reporter);
+
+public slots:
+    std::optional<std::vector<Reward>> eligibility(AccountNumber accountNumber); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
+
+//public signals:
+    //void rewards(std::vector<Reward> results);
+
 private:
     QPointer<QObject> _eligibilityService;
 };
-
+*/
 } // namespace services

@@ -4,10 +4,11 @@
 
 
 namespace services {
+    /*
 class Service : public QObject {
   Q_OBJECT
 public:
-    Service(QPointer<QObject> parent) : _parent{ parent }
+    Service(QObject* parent = nullptr) : QObject{ parent }
     {
         blockSignals(true);
     }
@@ -29,8 +30,7 @@ public:
     bool isRunning() { return _running; };
 
 private:
-    QPointer<QObject> _parent{ nullptr };
     bool _running{ true };
 };
-
+*/
 } // namespace services

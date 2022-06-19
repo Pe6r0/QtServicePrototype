@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(TestService)
+project(Services)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -17,20 +17,20 @@ enable_testing(true)
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT TestService)
 
 set(SOURCES
-    src/main.cpp
-    src/Service_Test.cpp
+	src/Service_Test.cpp
 	src/Service.cpp
+	src/ServiceManager.cpp
 	src/EligibilityService.cpp
 	src/RewardsService.cpp)
 set(HEADERS
-    include/Service_Test.h
 	include/Service.h
+	include/ServiceManager.h
 	include/EligibilityService.h
 	include/RewardsService.h)
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-add_test(NAME mytest COMMAND mytest)
+add_test(NAME Service_Test COMMAND Service_Test)
 
-target_link_libraries(TestService 
+target_link_libraries(Services 
 PUBLIC
 
 PRIVATE
@@ -38,9 +38,15 @@ Qt::Widgets
 Qt::Test
 Qt::Core)
 
-add_custom_command(TARGET TestService POST_BUILD
+add_custom_command(TARGET Services POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E
         env PATH="${_qt_bin_dir}" "${WINDEPLOYQT_EXECUTABLE}"
-            "$<TARGET_FILE:TestService>"
+            "$<TARGET_FILE:Services>"
     COMMENT "Running windeployqt..."
 )
+
+add_custom_command(
+        TARGET Services POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/src/config.json
+                ${CMAKE_CURRENT_BINARY_DIR}/config.json)
