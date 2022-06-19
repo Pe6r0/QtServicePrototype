@@ -5,8 +5,6 @@
 #include <QPointer>
 
 #include "Service.h"
-#include "ServiceManager.h"
-#include "EligibilityService.h"
 
 namespace services {
 
@@ -17,10 +15,12 @@ class RewardsService : public Service {
 public:
     RewardsService(QObject* parent = nullptr);
 
-    //bool setEligibityService(Service &reporter);
-    Reward myRewards;
+    ~RewardsService();
 
-public slots:
+
+    //bool setEligibityService(Service &reporter);
+    //Reward myRewards = Reward::CHAMPIONS;
+
 
     //std::vector<Reward> getRewards(const AccountNumber accountNumber, std::vector<Channel>); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
 
@@ -28,7 +28,7 @@ public slots:
     //void rewards(std::vector<Reward> results);
 
 private:
-    QPointer<EligibilityService> _eligibilityService;
+    //QPointer<EligibilityService> _eligibilityService{nullptr};
 };
 
 } // namespace services

@@ -5,26 +5,15 @@ namespace services {
 class Service : public QObject {
     Q_OBJECT
 public:
-    Service(QObject* parent = nullptr) : QObject{ parent }
-    {
-        blockSignals(true);
-    }
+    Service(QObject* parent = nullptr);
 
-    virtual ~Service() {};
+    virtual ~Service();
 
-    void start() 
-    { 
-        blockSignals(false);
-        _running = true; 
-    };
+    void start();
 
-    void stop() 
-    {
-        _running = false; 
-        blockSignals(true);
-    };
+    void stop();
 
-    bool isRunning() { return _running; };
+    bool isRunning();
 
 private:
     bool _running{ false };

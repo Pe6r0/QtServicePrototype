@@ -1,15 +1,9 @@
 #include "RewardsService.h"
 
-namespace services 
-{
+using namespace services;
 
 RewardsService::RewardsService(QObject* parent) : Service(parent)
-
 {}
 
-bool setEligibityService(Service& reporter)
-{
-    return true;
-}
-
-}
+RewardsService::~RewardsService()
+{}

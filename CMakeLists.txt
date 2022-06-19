@@ -18,28 +18,23 @@ set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Services)
 
 include_directories("include")
 
-set(SOURCES
-	src/main.cpp
-	src/ServiceManager.cpp
-	src/EligibilityService.cpp
-	src/RewardsService.cpp)
+file(GLOB SOURCES "src/*.cpp")
 
 set(HEADERS
 	include/Service.h
-	include/ServiceManager.h
-	include/ServiceManager_Test.h
+    include/Comm.h
 	include/EligibilityService.h
-	include/RewardsService.h
-	include/RewardsService_Test.h)
+    include/RewardsService.h
+    include/ServiceManager.h
+    include/RewardsService_Test.h
+    include/ServiceManager_Test.h)
+
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 add_test(NAME ServiceManager_Test COMMAND ServiceManager_Test)
 add_test(NAME RewardsService_Test COMMAND RewardsService_Test)
 
 target_link_libraries(Services 
-PUBLIC
-
-PRIVATE
 Qt::Widgets
 Qt::Test
 Qt::Core)
@@ -51,8 +46,3 @@ add_custom_command(TARGET Services POST_BUILD
     COMMENT "Running windeployqt..."
 )
 
-add_custom_command(
-        TARGET Services POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/src/config.json
-                ${CMAKE_CURRENT_BINARY_DIR}/config.json)
