@@ -4,7 +4,6 @@
 
 
 namespace services {
-    /*
 class Service : public QObject {
   Q_OBJECT
 public:
@@ -32,5 +31,5 @@ public:
 private:
     bool _running{ true };
 };
-*/
+
 } // namespace services

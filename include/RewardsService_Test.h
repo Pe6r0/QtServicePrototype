@@ -1,3 +1,4 @@
+#pragma once
 #include <QJsonDocument>
 #include <QFile>
 #include <iostream>
@@ -38,11 +39,24 @@ int main()
 
 #include <QTest>
 
-class Service_Test : public QObject {
+class RewardsService_Test : public QObject {
     Q_OBJECT
 private slots:
+
+    /*
+
+    initTestCase() will be called before the first test function is executed.
+    initTestCase_data() will be called to create a global test data table.
+    cleanupTestCase() will be called after the last test function was executed.
+    init() will be called before each test function is executed.
+    cleanup() will be called after every test function.
+
+    */
     void t1() { QVERIFY(true); }
+
+    void t2() { QVERIFY(true); }
+
+    void t4() { QVERIFY(true); }
 };
 
-QTEST_MAIN(Service_Test)
-#include "Service_Test.moc"
+//#include "RewardsService_Test.moc"
