@@ -11,5 +11,7 @@ int main(int argc, char** argv)
 
     runTest(RewardsService_Test());
 
+    //TODO: add eligibility tests when class is developed
+
     return status;
 }

@@ -17,7 +17,6 @@ void EligibilityService::checkEligibility(const AccountNumber number)
         emit(eligibility(Output{ number, Output::Type::ERROR }));
     }
     else {
-        qDebug() << "[EligibilityService] emitting eligibility check result.";
         emit(eligibility(Output{ number, number % 2 == 0 ? Output::Type::CUSTOMER_ELIGIBLE : Output::Type::CUSTOMER_INELIGIBLE }));
     }
 }
@@ -26,7 +25,7 @@ void EligibilityService::setRewardsService(RewardsService& rewardsService)
 {
     if (!_rewardsService)
     {
-        //TODO disconnect everything
+        disconnect(this, &EligibilityService::eligibility, _rewardsService, &RewardsService::eligibilityGiven);
     }
     _rewardsService = &rewardsService;
    

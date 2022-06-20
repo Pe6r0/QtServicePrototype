@@ -5,30 +5,32 @@
 
 namespace services {
 
-    using AccountNumber = size_t;
+using AccountNumber = size_t;
 
-    enum class ServicesType
-    {
-        REWARDS_SERVICE,
-        ELIGIBILITY_SERVICE //TODO PP: in development :)
-    };
+constexpr AccountNumber cInvalidNumber = 0;
 
-    enum class Reward
-    {
-        CHAMPIONS,
-        KARAOKE,
-        PIRATES
-    };
+enum class ServicesType
+{
+    REWARDS_SERVICE,
+    ELIGIBILITY_SERVICE //TODO PP: in development :)
+};
 
-    enum class Channel
-    {
-        SPORTS,
-        KIDS,
-        MUSIC,
-        NEWS,
-        MOVIES
-    };
+enum class Reward
+{
+    CHAMPIONS,
+    KARAOKE,
+    PIRATES
+};
 
-    std::string rewardToString(const Reward t);
-    std::string channelToString(const Channel t);
-}
+enum class Channel
+{
+    SPORTS,
+    KIDS,
+    MUSIC,
+    NEWS,
+    MOVIES
+};
+
+std::string rewardToString(const Reward t);
+std::string channelToString(const Channel t);
+} // namespace services

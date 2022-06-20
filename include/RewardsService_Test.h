@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include <QPointer>
 #include <iostream>
 #include <QTest>
@@ -7,25 +9,20 @@
 #include "RewardsService.h"
 #include "EligibilityService.h"
 
-namespace
-{
-    services::AccountNumber cInvalidNumber = 0;
-}
-
 class RewardsService_Test : public QObject {
     Q_OBJECT
 
-
-    //emulates the behaviour of the caller for rewards requests. In a non test environment this object would follow similar slot/signal pattern as the rewardsService
+    /*@brief rewardsQuery emulates the behaviour of the caller for rewards requests.
+      In a non test environment this object would follow similar slot/signal pattern as the rewardsService/eligibilityService.*/
     void rewardsQuery(const services::AccountNumber number, const std::vector<services::Channel>& channels) 
     {
         QVERIFY(_rewardsService != nullptr);
         QVERIFY(_eligibilityService != nullptr);
-        QVERIFY(_data.first == cInvalidNumber);
+        QVERIFY(_rewardsReply._number == services::cInvalidNumber);
 
-        connect(_rewardsService, &services::RewardsService::rewardsAvailable, this, [&](services::AccountNumber number, std::vector<services::Reward> results)
+        connect(_rewardsService, &services::RewardsService::rewardsAvailable, this, [&](services::RewardsService::RewardsServiceReply results)
             {
-                _data = { number, results };
+                _rewardsReply = results;
             });
 
         _rewardsService->rewardsCheck(number, channels);
@@ -35,7 +32,7 @@ class RewardsService_Test : public QObject {
 private slots:
     void init()
     {
-        _data = { cInvalidNumber, {} };
+        _rewardsReply = services::RewardsService::RewardsServiceReply();
         _rewardsService = new services::RewardsService(this);
         _eligibilityService = new services::EligibilityService(this);
     }
@@ -43,6 +40,7 @@ private slots:
     void cleanup()
     {
         delete _rewardsService.data();
+        delete _eligibilityService.data();
     }
 
     void testDefaultRunningBehaviour()
@@ -63,7 +61,7 @@ private slots:
     {
         rewardsQuery(249, { services::Channel::KIDS });
 
-        QVERIFY(_data.first == cInvalidNumber);
+        QVERIFY(_rewardsReply._number == services::cInvalidNumber);
     }
 
     void testConnectionToService_testEligibilityServiceNotRunning()
@@ -71,50 +69,63 @@ private slots:
         _rewardsService->start();
         _rewardsService->setEligibityService(*_eligibilityService);
         rewardsQuery(249, { services::Channel::KIDS });
-        QVERIFY(_data.first == cInvalidNumber);
+
+        QVERIFY(_rewardsReply._number == services::cInvalidNumber);
     }
 
     void testConnectionToService_succesfulConnection() 
     {
-        const int testNumber = 248;
+        const auto testNumber = 248;
         _rewardsService->start();
         _eligibilityService->start();
         _rewardsService->setEligibityService(*_eligibilityService);
         rewardsQuery(testNumber, { services::Channel::SPORTS });
         
-        QVERIFY(_data.first == testNumber);
-        QVERIFY(_data.second == std::vector<services::Reward>{ services::Reward::CHAMPIONS});
+        QVERIFY(_rewardsReply._number == testNumber);
+        QVERIFY(_rewardsReply._rewards == std::vector<services::Reward>{ services::Reward::CHAMPIONS});
+    }
+
+    void testConnectionToService_succesfulConnectionLarge()
+    {
+        const auto testNumber = 248;
+        _rewardsService->start();
+        _eligibilityService->start();
+        _rewardsService->setEligibityService(*_eligibilityService);
+        rewardsQuery(testNumber, { services::Channel::SPORTS, services::Channel::KIDS, services::Channel::MUSIC });
+
+        QVERIFY(_rewardsReply._number == testNumber);
+        QVERIFY(std::find(_rewardsReply._rewards.begin(), _rewardsReply._rewards.end(), services::Reward::CHAMPIONS) != _rewardsReply._rewards.end());
+        QVERIFY(std::find(_rewardsReply._rewards.begin(), _rewardsReply._rewards.end(), services::Reward::KARAOKE) != _rewardsReply._rewards.end());
+        QVERIFY(std::find(_rewardsReply._rewards.begin(), _rewardsReply._rewards.end(), services::Reward::PIRATES) == _rewardsReply._rewards.end());
     }
 
     void testConnectionToService_succesfulConnection_unneligible()
     {
-        const int testNumber = 241;
+        const auto testNumber = 241;
         _rewardsService->start();
         _eligibilityService->start();
         _rewardsService->setEligibityService(*_eligibilityService);
         rewardsQuery(testNumber, { services::Channel::SPORTS });
 
-        QVERIFY(_data.first == testNumber);
-        QVERIFY(_data.second.empty()); //todo: no pair
+        QVERIFY(_rewardsReply._number == testNumber);
+        QVERIFY(_rewardsReply._rewards.empty());
     }
 
     void testConnectionToService_succesfulConnection_badRequest()
     {
-        const int testNumber = 0;
+        const auto testNumber = 0;
         _rewardsService->start();
         _eligibilityService->start();
         _rewardsService->setEligibityService(*_eligibilityService);
         rewardsQuery(testNumber, { services::Channel::SPORTS });
 
-        QVERIFY(_data.first == testNumber);
-        QVERIFY(_data.second.empty()); //todo: no pair
+        QVERIFY(_rewardsReply._number == testNumber);
+        QVERIFY(_rewardsReply._rewards.empty());
     }
-
 
 private:
     QPointer<services::RewardsService>_rewardsService;
     QPointer<services::EligibilityService>_eligibilityService;
-    std::pair<services::AccountNumber, std::vector<services::Reward>> _data{ cInvalidNumber, {} };
-};
 
-//#include "RewardsService_Test.moc"
+    services::RewardsService::RewardsServiceReply _rewardsReply;
+};

@@ -2,14 +2,14 @@
 
 #include <unordered_map>
 
-#include <QObject> 
+#include <QObject>
 #include <QString> 
 
 namespace services
 {
 static const std::unordered_map<Reward, QString> rewardsNames{ {Reward::CHAMPIONS, QObject::tr("Champions League Ticket Final")},
-                                                                {Reward::KARAOKE, QObject::tr("Karaoke Pro Microphone") },
-                                                                {Reward::PIRATES, QObject::tr("Pirates of the Caribean Collection")} };
+                                                               {Reward::KARAOKE, QObject::tr("Karaoke Pro Microphone") },
+                                                               {Reward::PIRATES, QObject::tr("Pirates of the Caribean Collection")} };
 
 static const std::unordered_map<Channel, QString> channelNames{ {Channel::SPORTS, QObject::tr("Sports")},
                                                                 {Channel::KIDS, QObject::tr("Kids") },
