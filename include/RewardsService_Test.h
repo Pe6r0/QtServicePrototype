@@ -1,62 +1,120 @@
 #pragma once
-#include <QJsonDocument>
-#include <QFile>
+#include <QPointer>
 #include <iostream>
-
-#include "RewardsService.h"
-/*
-namespace {
-    constexpr const char* cConfigFile = "config.json";
-}
-
-int main()
-{
-    std::cerr << "*** Services Starting ***" << std::endl;
-    auto file = QFile(cConfigFile);
-    if (!file.exists())
-    {
-        std::cerr << "config.json not present. terminating." << std::endl;
-        return EXIT_FAILURE;
-    }
-    QJsonParseError error;
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    const auto jsonDoc = QJsonDocument::fromJson(file.readAll(), &error);
-    file.close();
-
-    if (error.error != QJsonParseError::NoError)
-    {
-        std::cerr << "config.json parsed improperly. [" << error.errorString().toStdString() << error.offset  << "]. Terminating." << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    services::ServiceManager manager;
-
-    manager.setupServices(jsonDoc);
-
-    //std::cout << jsonDoc.toJson(QJsonDocument::Compact).toStdString() << std::endl;
-    return EXIT_SUCCESS;
-}*/
-
 #include <QTest>
+
+#include "Comm.h"
+#include "RewardsService.h"
+#include "EligibilityService.h"
+
+namespace
+{
+    services::AccountNumber cInvalidNumber = 0;
+}
 
 class RewardsService_Test : public QObject {
     Q_OBJECT
+
+
+    //emulates the behaviour of the caller for rewards requests. In a non test environment this object would follow similar slot/signal pattern as the rewardsService
+    void rewardsQuery(const services::AccountNumber number, const std::vector<services::Channel>& channels) 
+    {
+        QVERIFY(_rewardsService != nullptr);
+        QVERIFY(_eligibilityService != nullptr);
+        QVERIFY(_data.first == cInvalidNumber);
+
+        connect(_rewardsService, &services::RewardsService::rewardsAvailable, this, [&](services::AccountNumber number, std::vector<services::Reward> results)
+            {
+                _data = { number, results };
+            });
+
+        _rewardsService->rewardsCheck(number, channels);
+        QCoreApplication::processEvents();
+    }
+
 private slots:
+    void init()
+    {
+        _data = { cInvalidNumber, {} };
+        _rewardsService = new services::RewardsService(this);
+        _eligibilityService = new services::EligibilityService(this);
+    }
 
-    /*
+    void cleanup()
+    {
+        delete _rewardsService.data();
+    }
 
-    initTestCase() will be called before the first test function is executed.
-    initTestCase_data() will be called to create a global test data table.
-    cleanupTestCase() will be called after the last test function was executed.
-    init() will be called before each test function is executed.
-    cleanup() will be called after every test function.
+    void testDefaultRunningBehaviour()
+    { 
+        QVERIFY(!_rewardsService->isRunning());
+    }
 
-    */
-    void t1() { QVERIFY(true); }
+    void testStartStop()
+    {
+        QVERIFY(!_rewardsService->isRunning());
+        _rewardsService->start();
+        QVERIFY(_rewardsService->isRunning());
+        _rewardsService->stop();
+        QVERIFY(!_rewardsService->isRunning());
+    }
 
-    void t2() { QVERIFY(true); }
+    void testConnectionToService_noEligibilityService()
+    {
+        rewardsQuery(249, { services::Channel::KIDS });
 
-    void t4() { QVERIFY(true); }
+        QVERIFY(_data.first == cInvalidNumber);
+    }
+
+    void testConnectionToService_testEligibilityServiceNotRunning()
+    {
+        _rewardsService->start();
+        _rewardsService->setEligibityService(*_eligibilityService);
+        rewardsQuery(249, { services::Channel::KIDS });
+        QVERIFY(_data.first == cInvalidNumber);
+    }
+
+    void testConnectionToService_succesfulConnection() 
+    {
+        const int testNumber = 248;
+        _rewardsService->start();
+        _eligibilityService->start();
+        _rewardsService->setEligibityService(*_eligibilityService);
+        rewardsQuery(testNumber, { services::Channel::SPORTS });
+        
+        QVERIFY(_data.first == testNumber);
+        QVERIFY(_data.second == std::vector<services::Reward>{ services::Reward::CHAMPIONS});
+    }
+
+    void testConnectionToService_succesfulConnection_unneligible()
+    {
+        const int testNumber = 241;
+        _rewardsService->start();
+        _eligibilityService->start();
+        _rewardsService->setEligibityService(*_eligibilityService);
+        rewardsQuery(testNumber, { services::Channel::SPORTS });
+
+        QVERIFY(_data.first == testNumber);
+        QVERIFY(_data.second.empty()); //todo: no pair
+    }
+
+    void testConnectionToService_succesfulConnection_badRequest()
+    {
+        const int testNumber = 0;
+        _rewardsService->start();
+        _eligibilityService->start();
+        _rewardsService->setEligibityService(*_eligibilityService);
+        rewardsQuery(testNumber, { services::Channel::SPORTS });
+
+        QVERIFY(_data.first == testNumber);
+        QVERIFY(_data.second.empty()); //todo: no pair
+    }
+
+
+private:
+    QPointer<services::RewardsService>_rewardsService;
+    QPointer<services::EligibilityService>_eligibilityService;
+    std::pair<services::AccountNumber, std::vector<services::Reward>> _data{ cInvalidNumber, {} };
 };
 
 //#include "RewardsService_Test.moc"

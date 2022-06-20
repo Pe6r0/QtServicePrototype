@@ -4,6 +4,9 @@
 #include <string>
 
 namespace services {
+
+    using AccountNumber = size_t;
+
     enum class ServicesType
     {
         REWARDS_SERVICE,

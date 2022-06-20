@@ -22,5 +22,8 @@ void Service::stop()
     blockSignals(true);
 };
 
-bool Service::isRunning() { return _running; };
+bool Service::isRunning() 
+{ 
+    return _running; 
+};
 }

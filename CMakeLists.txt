@@ -25,13 +25,11 @@ set(HEADERS
     include/Comm.h
 	include/EligibilityService.h
     include/RewardsService.h
-    include/ServiceManager.h
     include/RewardsService_Test.h
-    include/ServiceManager_Test.h)
+    )
 
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-add_test(NAME ServiceManager_Test COMMAND ServiceManager_Test)
 add_test(NAME RewardsService_Test COMMAND RewardsService_Test)
 
 target_link_libraries(Services 

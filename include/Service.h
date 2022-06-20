@@ -18,6 +18,4 @@ public:
 private:
     bool _running{ false };
 };
-
-
 } // namespace services

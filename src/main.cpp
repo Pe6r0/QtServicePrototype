@@ -1,4 +1,3 @@
-#include "ServiceManager_Test.h"
 #include "RewardsService_Test.h"
 
 int main(int argc, char** argv)
@@ -11,8 +10,6 @@ int main(int argc, char** argv)
     };
 
     runTest(RewardsService_Test());
-
-    runTest(ServiceManager_Test());
 
     return status;
 }

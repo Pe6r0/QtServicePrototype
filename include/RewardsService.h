@@ -1,34 +1,40 @@
 #pragma once
 #include <vector>
+#include <optional>
 
 #include <QWidget>
 #include <QPointer>
 
+#include "Comm.h"
 #include "Service.h"
+#include "EligibilityService.h"
 
-namespace services {
+namespace services
+{
 
-using AccountNumber = size_t;
+    class RewardsService : public Service {
+      Q_OBJECT
+    public:
+        RewardsService(QObject* parent = nullptr);
 
-class RewardsService : public Service {
-  Q_OBJECT
-public:
-    RewardsService(QObject* parent = nullptr);
+        ~RewardsService();
 
-    ~RewardsService();
+        void setEligibityService(EligibilityService& service);
 
+        std::optional<Reward> getReward(const Channel c);
 
-    //bool setEligibityService(Service &reporter);
-    //Reward myRewards = Reward::CHAMPIONS;
+    signals:
+        void rewardsAvailable(AccountNumber number, std::vector<Reward> results);
+        void eligibilityCheck(AccountNumber i);
 
+    public slots:
+        void eligibilityGiven(EligibilityService::Output value);
+        void rewardsCheck(const AccountNumber number, std::vector<Channel> channels);
 
-    //std::vector<Reward> getRewards(const AccountNumber accountNumber, std::vector<Channel>); //use signals to communicate instead of direct calls (add wait here, maybe timeout)
-
-//public signals:
-    //void rewards(std::vector<Reward> results);
-
-private:
-    //QPointer<EligibilityService> _eligibilityService{nullptr};
-};
+    private:
+        QPointer<EligibilityService> _eligibilityService;
+        std::map<AccountNumber, std::vector<Channel>> _ongoingRequests;
+        std::map<Channel, Reward> _rewards;
+    };
 
 } // namespace services
